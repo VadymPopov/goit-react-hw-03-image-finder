@@ -6,6 +6,7 @@ import SearchForm from "./SearchBar";
 import ModalLightbox from "./Modal";
 import LoadMoreBtn from "./Button";
 import Loader from "./Loader";
+import ScrollUp from "./ScrollUp";
 import { Toaster } from 'react-hot-toast';
 import getImages from "services/api";
 
@@ -17,6 +18,7 @@ class App extends Component{
     isOpenModal: false,
     isLoading: false,
     largeImg: '',
+    loadMore: true,
 };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -26,6 +28,12 @@ class App extends Component{
         this.setState({isLoading: true});
         try {
             const images =  await getImages(value.trim(), page);
+            console.log(images)
+
+            if(images.totalHits/12 < this.state.page){
+              this.setState({loadMore: false});
+            }
+
             this.setState({images: [...this.state.images,...images.hits]});
 
             if (page > 1 ) {
@@ -67,6 +75,7 @@ class App extends Component{
       images: [],
       page: 1,
       value: value,
+      loadMore: true,
     });
   };
 
@@ -86,14 +95,15 @@ class App extends Component{
           <SearchForm  onSearch={this.onChangeQuery}/>
 
           <GalleryList images={images} onImageClick={this.handleGalleryItem} />
-          {images.length > 0 && <LoadMoreBtn onClick={this.handleLoad} />}
+          {this.state.loadMore && images.length > 0 && <LoadMoreBtn onClick={this.handleLoad} />}
 
           {isOpenModal && <ModalLightbox onClose={this.closeModal}>
             <img src={largeImg} alt="modal-img"/>
           </ModalLightbox>}
 
           {isLoading && <Loader />}
-
+          
+          <ScrollUp/>
           <Toaster position='top-right' toastOptions={{
             duration:1500 
           }}/>
