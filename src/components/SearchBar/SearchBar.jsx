@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import { FormWrapper, Input, Button, SearchBar, BtnLabel } from "./SearchBar.styled";
+import { FormWrapper, Input, Button, SearchBar } from "./SearchBar.styled";
 import { toast } from "react-hot-toast";
 import {FcSearch} from 'react-icons/fc';
 
@@ -34,7 +34,6 @@ class SearchForm extends Component  {
         <FormWrapper autoComplete="off">
         <Button type="submit">
         <FcSearch></FcSearch>
-          {/* <BtnLabel>Search</BtnLabel> */}
         </Button>
 
         <Input name="name" type="text" placeholder="Search images and photos" autoComplete="off" autoFocus value={this.state.value} onChange={this.handleChange} />
